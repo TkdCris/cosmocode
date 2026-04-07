@@ -24,3 +24,50 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@layer base {
+
+  /* Animação para as estrelas subirem */
+  @keyframes animStar {
+    from {
+      transform: translateY(0px);
+    }
+
+    to {
+      transform: translateY(-2000px);
+    }
+  }
+
+  /* Gerador de Estrelas (usaremos via IDs no componente) */
+  #stars,
+  #stars2,
+  #stars3 {
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+  }
+
+  #stars {
+    width: 1px;
+    height: 1px;
+    box-shadow: 145px 123px #FFF, 456px 789px #FFF, 1200px 300px #FFF, 500px 2500px #FFF;
+    /* IA vai gerar mais abaixo */
+    animation: animStar 50s linear infinite;
+  }
+
+  #stars2 {
+    width: 2px;
+    height: 2px;
+    animation: animStar 100s linear infinite;
+  }
+
+  #stars3 {
+    width: 3px;
+    height: 3px;
+    animation: animStar 150s linear infinite;
+  }
+}

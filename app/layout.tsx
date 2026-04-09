@@ -31,7 +31,10 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-950 text-white selection:bg-cyan-500 selection:text-black">
+      <body 
+        className="min-h-full flex flex-col bg-slate-950 text-white selection:bg-cyan-500 selection:text-black"
+        suppressHydrationWarning
+      >
         <StarBackground />
         <div className="relative z-10 flex flex-col min-h-screen">
           <Header />

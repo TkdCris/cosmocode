@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { initMercadoPago, Payment } from '@mercadopago/sdk-react';
 
 // Log para confirmar que o browser baixou o arquivo
@@ -17,6 +17,7 @@ export default function CosmosWalletButton({ tenantId, items = [] }: CosmosWalle
   const [preferenceId, setPreferenceId] = useState<string | null>(null);
   const [transactionId, setTransactionId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const hasInitializedRef = useRef(false);
 
   const totalAmount = (items || []).reduce((acc, item) => acc + (item.unit_price * item.quantity), 0);
 
@@ -25,6 +26,7 @@ export default function CosmosWalletButton({ tenantId, items = [] }: CosmosWalle
     let isMounted = true;
     
     const prepare = async () => {
+      console.log("[CosmoPay] 🔄 Iniciando preparação do checkout...");
       try {
         const response = await fetch("/api/cosmopay/checkout", {
           method: "POST",
@@ -37,33 +39,36 @@ export default function CosmosWalletButton({ tenantId, items = [] }: CosmosWalle
 
         if (!response.ok) throw new Error(`Erro na API: ${response.status}`);
         const data = await response.json();
+        
+        console.log("[CosmoPay] 🛰️ Resposta da API recebida!");
 
-        if (isMounted && data.publicKey && data.preferenceId) {
-          console.log("[CosmoPay] 🔑 Inicializando Mercado Pago SDK...");
-          initMercadoPago(data.publicKey, { 
+        if (!isMounted) return;
+
+        const { publicKey, preferenceId: prefId, transactionId: transId } = data;
+
+        if (publicKey && prefId) {
+          console.log("[CosmoPay] 🔑 Inicializando SDK e liberando UI...");
+          initMercadoPago(publicKey, { 
             locale: 'pt-BR',
             advancedFraudPrevention: false,
             trackingDisabled: true
           });
           
-          setPreferenceId(data.preferenceId);
-          setTransactionId(data.transactionId);
-          
-          // Pequeno delay para garantir que o SDK registrou a chave no window
-          setTimeout(() => {
-            if (isMounted) {
-              setIsSdkReady(true);
-              setIsLoading(false);
-              console.log("[CosmoPay] ✅ SDK Pronto e Liberado!");
-            }
-          }, 200);
-        }
-      } catch (err: any) {
-        console.error("[CosmoPay] ❌ Erro na preparação:", err);
-        if (isMounted) {
-          setError(err.message || "Erro de conexão detectado.");
+          setPreferenceId(prefId);
+          setTransactionId(transId);
+          setIsSdkReady(true);
+          setIsLoading(false);
+          console.log("[CosmoPay] ✅ Checkout Pronto!");
+        } else {
+          console.error("[CosmoPay] ❌ Dados insuficientes:", data);
+          setError("Dados de pagamento inválidos.");
           setIsLoading(false);
         }
+      } catch (err: any) {
+        if (!isMounted) return;
+        console.error("[CosmoPay] ❌ Falha crítica no prepare:", err);
+        setError("Erro ao preparar checkout.");
+        setIsLoading(false);
       }
     };
 
@@ -136,7 +141,13 @@ export default function CosmosWalletButton({ tenantId, items = [] }: CosmosWalle
               theme: 'dark',
             },
           },
-          paymentMethods: { creditCard: 'all', bankTransfer: ['pix'] }
+          paymentMethods: {
+            creditCard: 'all',
+            debitCard: 'all',
+            ticket: 'all',
+            bankTransfer: 'all',
+            mercadoPago: 'all',
+          },
         }}
         onSubmit={onSubmit}
         onReady={() => console.log("[CosmoPay] 🎯 Payment Brick Renderizado!")}

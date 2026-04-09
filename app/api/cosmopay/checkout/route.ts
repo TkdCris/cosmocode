@@ -25,7 +25,8 @@ export async function POST(req: NextRequest) {
         tenantId: activeTenantId,
         amount: items.reduce((acc: number, item: any) => acc + (item.unit_price * item.quantity), 0),
         status: "pending",
-        preferenceId: "temp_" + Date.now(), // Temporário, atualizaremos após criar no MP
+        // Usamos randomUUID para um ID único e estável
+        preferenceId: `temp_${crypto.randomUUID()}`,
         metadata: metadata || {},
       },
     });

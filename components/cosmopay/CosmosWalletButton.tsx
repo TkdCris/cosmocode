@@ -40,7 +40,11 @@ export default function CosmosWalletButton({ tenantId, items = [] }: CosmosWalle
 
         if (isMounted && data.publicKey && data.preferenceId) {
           console.log("[CosmoPay] 🔑 Inicializando Mercado Pago SDK...");
-          initMercadoPago(data.publicKey, { locale: 'pt-BR' });
+          initMercadoPago(data.publicKey, { 
+            locale: 'pt-BR',
+            advancedFraudPrevention: false,
+            trackingDisabled: true
+          });
           
           setPreferenceId(data.preferenceId);
           setTransactionId(data.transactionId);
@@ -88,7 +92,9 @@ export default function CosmosWalletButton({ tenantId, items = [] }: CosmosWalle
       if (result.error) throw new Error(result.error);
 
       if (result.status === "approved" || result.status === "in_process") {
-        window.location.href = `/checkout/success?payment_id=${result.paymentId}&status=${result.status}`;
+        const targetUrl = `${window.location.origin}/checkout/success?payment_id=${result.paymentId}&status=${result.status}`;
+        console.log("[CosmoPay] ✅ Redirecionando para:", targetUrl);
+        window.location.href = targetUrl;
       } else {
         alert(`O pagamento não foi aprovado: ${result.status_detail}`);
       }

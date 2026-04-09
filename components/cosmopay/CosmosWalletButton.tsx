@@ -96,12 +96,23 @@ export default function CosmosWalletButton({ tenantId, items = [] }: CosmosWalle
       const result = await response.json();
       if (result.error) throw new Error(result.error);
 
-      if (result.status === "approved" || result.status === "in_process") {
-        const targetUrl = `${window.location.origin}/checkout/success?payment_id=${result.paymentId}&status=${result.status}`;
+      // Verificamos aprovado, em processo ou pendente (PIX)
+      const isSuccess = ["approved", "in_process", "pending"].includes(result.status);
+
+      if (isSuccess) {
+        let targetUrl = `${window.location.origin}/checkout/success?payment_id=${result.paymentId || result.payment_id}&status=${result.status}`;
+        
+        // Se for PIX, anexamos os dados do QR Code para exibição
+        if (result.point_of_interaction?.transaction_data) {
+          const { qr_code, qr_code_base64 } = result.point_of_interaction.transaction_data;
+          if (qr_code) targetUrl += `&qr_code=${encodeURIComponent(qr_code)}`;
+          if (qr_code_base64) targetUrl += `&qr_code_base64=${encodeURIComponent(qr_code_base64)}`;
+        }
+
         console.log("[CosmoPay] ✅ Redirecionando para:", targetUrl);
         window.location.href = targetUrl;
       } else {
-        alert(`O pagamento não foi aprovado: ${result.status_detail}`);
+        alert(`Estado do pagamento: ${result.status_detail || result.status}`);
       }
     } catch (err: any) {
       console.error("[CosmoPay] ❌ Erro no Submit:", err);

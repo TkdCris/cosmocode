@@ -66,11 +66,12 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    // 4. Retornar o resultado para o frontend
+    // 4. Retornar o resultado para o frontend, incluindo dados de PIX se existirem
     return NextResponse.json({
       status: paymentResponse.status,
       status_detail: paymentResponse.status_detail,
       paymentId: paymentResponse.id,
+      point_of_interaction: paymentResponse.point_of_interaction,
     });
 
   } catch (error: any) {

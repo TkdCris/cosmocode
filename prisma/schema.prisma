@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Transaction {
+  id               String   @id @default(cuid())
+  tenantId         String   // Indica se é COSMOCODE, ASPECTUS, etc.
+  preferenceId     String   @unique
+  paymentId        String?  // Será preenchido quando o webhook retornar o ID
+  status           String   @default("pending") // pending, approved, rejected
+  amount           Float
+  currency         String   @default("BRL")
+  customerEmail    String?
+  metadata         Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}

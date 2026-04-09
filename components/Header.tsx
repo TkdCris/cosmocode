@@ -37,10 +37,19 @@ export default function Header() {
           >
             DevLog
           </Link>
+
+          {/* Botão Cosmopay Checkout */}
+          <Link 
+            href="/checkout" 
+            className="ml-4 px-4 py-1.5 bg-cyan-500 text-slate-950 text-xs font-bold uppercase rounded hover:bg-white hover:shadow-[0_0_15px_rgba(255,255,255,0.5)] transition-all duration-300 flex items-center gap-2 group"
+          >
+            <span className="group-hover:translate-x-0.5 transition-transform">CosmoPay</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </Link>
         </nav>
 
         {/* Status indicator (Retro detail) */}
-        <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-slate-900 border border-slate-700 text-[10px] text-emerald-500">
+        <div className="hidden lg:flex items-center gap-2 px-3 py-1 bg-slate-900 border border-slate-700 text-[10px] text-emerald-500">
           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_5px_rgba(16,185,129,0.8)]"></div>
           SYSTEM: ONLINE
         </div>

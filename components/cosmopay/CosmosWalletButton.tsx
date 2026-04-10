@@ -74,7 +74,7 @@ export default function CosmosWalletButton({ tenantId, items = [] }: CosmosWalle
 
     prepare();
     return () => { isMounted = false; };
-  }, [tenantId]);
+  }, [tenantId, items]); // Adicionado items como dependência
 
   const onSubmit = async ({ formData }: any) => {
     console.log("[CosmoPay] 💳 Submetendo pagamento...");

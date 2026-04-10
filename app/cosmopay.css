@@ -98,3 +98,125 @@
   50% { opacity: 1; }
   100% { opacity: 0.5; }
 }
+
+/* Novos Estilos para o Formulário de Valor */
+.cosmopay-value-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.cosmopay-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.preset-button {
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.preset-button:hover {
+  background: rgba(0, 158, 227, 0.1);
+  border-color: #009ee3;
+  transform: translateY(-2px);
+}
+
+.preset-button.active {
+  background: #009ee3;
+  border-color: #009ee3;
+  box-shadow: 0 0 15px rgba(0, 158, 227, 0.4);
+}
+
+.custom-value-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.custom-value-input {
+  width: 100%;
+  padding: 16px;
+  padding-left: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.custom-value-input:focus {
+  border-color: #009ee3;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 16px;
+  top: 42px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 700;
+}
+
+.confirm-button {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #009ee3, #007bb1);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.3s;
+}
+
+.confirm-button:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 20px rgba(0, 158, 227, 0.3);
+}
+
+.confirm-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.payment-stage-summary {
+  padding: 16px;
+  background: rgba(0, 158, 227, 0.05);
+  border-radius: 16px;
+  border: 1px dashed rgba(0, 158, 227, 0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-value-btn {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #009ee3;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgba(0, 158, 227, 0.3);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

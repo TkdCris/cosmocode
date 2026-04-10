@@ -16,11 +16,22 @@ NEXT_PUBLIC_API_BASE_URL="SUA_URL_NGROK (ou cloudflare)"
 ```
 
 ### 2. Sincronização do Banco (Prisma 7)
-O projeto usa Prisma 7. Sempre que baixar o projeto ou resetar o ambiente, rode:
+O projeto usa Prisma 7. Existem dois comandos principais para manter o banco e o código em sincronia:
+
+#### A. Do Código para o Banco (Push)
+Use quando você alterar o arquivo `schema.prisma` e quiser enviar as mudanças para o banco de dados:
 ```bash
-npm install
+npx prisma db push
 npx prisma generate
 ```
+
+#### B. Do Banco para o Código (Pull)
+Use quando você fizer alterações diretamente no banco de dados (ex: via **pgAdmin**) e quiser que o arquivo `schema.prisma` seja atualizado automaticamente:
+```bash
+npx prisma db pull
+npx prisma generate
+```
+*Sempre rode o `generate` após um pull ou push para atualizar o Prisma Client.*
 
 ### 3. Exposição para Webhooks (Túneis)
 Como o Mercado Pago precisa enviar notificações (Webhooks) para o seu computador, você deve usar um túnel.
